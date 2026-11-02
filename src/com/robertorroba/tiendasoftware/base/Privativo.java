@@ -8,14 +8,14 @@ public class Privativo extends Producto {
 
     private double precio;
     private int unidades;
-    private HashMap<String,Integer> requisitos;
+    private HashMap<TipoRequisito,Integer> requisitos;
 
     public Privativo() {
         this.requisitos = new HashMap<>();
     }
 
     public Privativo(String nombre, String descripcion, LinkedList<String> categorias, LocalDate fechaPublicacion,
-                     TipoProducto tipoProducto, double precio,int unidades,HashMap<String,Integer> requisitos) {
+                     TipoProducto tipoProducto, double precio,int unidades,HashMap<TipoRequisito,Integer> requisitos) {
         super(nombre, descripcion, categorias, fechaPublicacion, tipoProducto);
         this.precio = precio;
         this.unidades = unidades;
@@ -38,11 +38,11 @@ public class Privativo extends Producto {
         this.unidades = unidades;
     }
 
-    public HashMap<String, Integer> getRequisitos() {
+    public HashMap<TipoRequisito, Integer> getRequisitos() {
         return requisitos;
     }
 
-    public void setRequisitos(HashMap<String, Integer> requisitos) {
+    public void setRequisitos(HashMap<TipoRequisito, Integer> requisitos) {
         this.requisitos = new HashMap<>(requisitos);
     }
 
