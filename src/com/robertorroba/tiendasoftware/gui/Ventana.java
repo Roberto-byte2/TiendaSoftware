@@ -1,5 +1,7 @@
 package com.robertorroba.tiendasoftware.gui;
 
+import com.github.lgooddatepicker.components.DatePicker;
+
 import javax.swing.*;
 
 public class Ventana {
@@ -14,4 +16,8 @@ public class Ventana {
     private JTextField nombreTxt;
     private JLabel descripcionLbl;
     private JTextField descripcionTxt;
+    private JLabel categoriasLbl;
+    private JTextField categoriasTxt;
+    private JLabel fechaPublicacionLbl;
+    private DatePicker fechaPublicacionTxt;
 }
