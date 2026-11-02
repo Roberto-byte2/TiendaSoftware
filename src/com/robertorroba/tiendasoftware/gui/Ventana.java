@@ -37,4 +37,11 @@ public class Ventana {
     private JTextField nucleosTxt;
     private JTextField espacioTxt;
     private JPanel panelPrivativo;
+    private JPanel panelInferior;
+    private JScrollPane productosScroll;
+    private JTable productosTabla;
+    private JButton nuevobtn;
+    private JButton importarBtn;
+    private JButton exportarBtn;
+    private JButton cerrarBtn;
 }
