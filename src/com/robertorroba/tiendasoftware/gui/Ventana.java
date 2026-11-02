@@ -20,4 +20,10 @@ public class Ventana {
     private JTextField categoriasTxt;
     private JLabel fechaPublicacionLbl;
     private DatePicker fechaPublicacionTxt;
+    private JPanel panelLibre;
+    private JLabel licenciaLbl;
+    private JTextField licenciaTxt;
+    private JCheckBox windowsCheckBox;
+    private JCheckBox linuxCheckBox;
+    private JCheckBox macOsCheckBox;
 }
