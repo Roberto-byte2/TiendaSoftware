@@ -23,7 +23,18 @@ public class Ventana {
     private JPanel panelLibre;
     private JLabel licenciaLbl;
     private JTextField licenciaTxt;
-    private JCheckBox windowsCheckBox;
-    private JCheckBox linuxCheckBox;
-    private JCheckBox macOsCheckBox;
+    private JCheckBox windowsChk;
+    private JCheckBox linuxChk;
+    private JCheckBox macOsChk;
+    private JLabel precioLbl;
+    private JTextField precioTxt;
+    private JLabel udsLbl;
+    private JTextField unidadesTxt;
+    private JCheckBox ramChck;
+    private JCheckBox espacioChk;
+    private JCheckBox nucleosChk;
+    private JTextField ramTxt;
+    private JTextField nucleosTxt;
+    private JTextField espacioTxt;
+    private JPanel panelPrivativo;
 }
