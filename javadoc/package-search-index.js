@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.robertorroba.tiendasoftware"},{"l":"com.robertorroba.tiendasoftware.base"},{"l":"com.robertorroba.tiendasoftware.gui"},{"l":"com.robertorroba.tiendasoftware.util"}];updateSearchResults();

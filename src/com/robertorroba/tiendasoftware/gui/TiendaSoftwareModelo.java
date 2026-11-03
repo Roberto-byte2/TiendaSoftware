@@ -14,16 +14,43 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
-
+/**
+ * Modelo de la aplicación "Tienda de Software".
+ * Gestiona la colección de productos (libres y privativos), así como su
+ * persistencia, importación y exportación a ficheros XML mediante la API DOM.
+ *
+ * @author Roberto Torroba
+ * @version 1.0
+ */
 public class TiendaSoftwareModelo {
+    /** Lista que almacena todos los productos de la tienda (tanto libres como privativos). */
     public ArrayList<Producto> listaProductos;
-
+    /**
+     * Constructor que inicializa la lista de productos vacía.
+     */
     public TiendaSoftwareModelo(){
         listaProductos = new ArrayList<>();
     }
+    /**
+     * Obtiene la lista completa de productos registrados en el modelo.
+     *
+     * @return Un {@link ArrayList} con todos los productos actuales.
+     */
     public ArrayList<Producto> obtenerProductos(){
         return listaProductos;
     }
+    /**
+     * Da de alta un nuevo producto de tipo Libre en la tienda, siempre y cuando
+     * no exista ya otro producto con el mismo nombre.
+     *
+     * @param nombre Nombre único del software.
+     * @param descripcion Descripción detallada del producto.
+     * @param categorias Lista de categorías a las que pertenece.
+     * @param fechaPublicacion Fecha de lanzamiento o publicación.
+     * @param tipoProducto Tipo o clasificación del producto.
+     * @param licencia Tipo de licencia libre (ej. GPL, MIT).
+     * @param sistemasCompatibles Conjunto de sistemas operativos compatibles.
+     */
     public void altaLibre(String nombre, String descripcion, LinkedList<String> categorias, LocalDate fechaPublicacion,
                           TipoProducto tipoProducto, String licencia, TreeSet<SistemaOperativo> sistemasCompatibles){
         if(!existeSoftware(nombre)) {
@@ -32,6 +59,19 @@ public class TiendaSoftwareModelo {
             listaProductos.add(nuevoLibre);
         }
     }
+    /**
+     * Da de alta un nuevo producto de tipo Privativo en la tienda, siempre y cuando
+     * no exista ya otro producto con el mismo nombre.
+     *
+     * @param nombre Nombre único del software.
+     * @param descripcion Descripción detallada del producto.
+     * @param categorias Lista de categorías a las que pertenece.
+     * @param fechaPublicacion Fecha de lanzamiento o publicación.
+     * @param tipoProducto Tipo o clasificación del producto.
+     * @param precio Precio de adquisición del software.
+     * @param unidades Número de licencias o unidades disponibles.
+     * @param requisitos Mapa con los requisitos técnicos necesarios y sus valores.
+     */
     public void altaPrivativo(String nombre, String descripcion, LinkedList<String> categorias, LocalDate fechaPublicacion,
                               TipoProducto tipoProducto, double precio, int unidades, HashMap<TipoRequisito,Integer> requisitos){
         if (!existeSoftware(nombre)) {
@@ -40,14 +80,26 @@ public class TiendaSoftwareModelo {
             listaProductos.add(nuevoPrivativo);
         }
     }
+    /**
+     * Comprueba si ya existe un producto registrado en la tienda con el nombre indicado
+     * (ignorando mayúsculas y minúsculas).
+     *
+     * @param nombre Nombre del software a buscar.
+     * @return {@code true} si el producto ya existe; {@code false} en caso contrario.
+     */
     public boolean existeSoftware(String nombre){
         for (Producto p:listaProductos) {
-            if(p != null && p.getNombre().equals(nombre)) {
+            if(p != null && p.getNombre().equalsIgnoreCase(nombre)) {
                 return true;
             }
         }
         return false;
     }
+    /**
+     * Exporta todos los productos de la lista actual a un fichero XML utilizando DOM.
+     *
+     * @param fichero Archivo de destino donde se guardará la estructura XML.
+     */
     public void exportarXML(File fichero){
 
         try {
@@ -162,6 +214,15 @@ public class TiendaSoftwareModelo {
 
 
     }
+
+    /**
+     * Lee un fichero XML e importa los productos contenidos en él hacia la lista del modelo.
+     *
+     * @param fichero Archivo XML de origen.
+     * @throws ParserConfigurationException Si ocurre un error de configuración en el parser DOM.
+     * @throws IOException Si ocurre un error de lectura de ficheros.
+     * @throws SAXException Si ocurre un error durante el análisis sintáctico del XML.
+     */
         public void importarXML(File fichero) throws ParserConfigurationException, IOException, SAXException {
             Libre nuevoLibre = null;
             Privativo nuevoPrivativo = null;
@@ -238,7 +299,14 @@ public class TiendaSoftwareModelo {
 
                 }
             }
-
+    /**
+     * Exporta un producto individual a un archivo XML existente o nuevo, comprobando
+     * previamente si ya está registrado para evitar duplicados.
+     *
+     * @param fichero Fichero XML donde se desea añadir el producto.
+     * @param producto Objeto producto que se quiere exportar.
+     * @return {@code true} si se exportó con éxito; {@code false} si ya existía o hubo un error.
+     */
     public boolean exportarProductoXML(File fichero, Producto producto) {
 
         try {
@@ -288,7 +356,14 @@ public class TiendaSoftwareModelo {
             return false;
         }
     }
-
+    /**
+     * Método auxiliar privado para comprobar si un producto ya se encuentra reflejado
+     * dentro de los nodos de un documento XML DOM cargado.
+     *
+     * @param raiz Nodo raíz del documento XML ("Productos").
+     * @param nombre Nombre del producto a buscar.
+     * @return {@code true} si se encuentra en el XML; {@code false} en caso contrario.
+     */
     private boolean productoExisteEnXML(Element raiz, String nombre) {
 
         NodeList productos = raiz.getChildNodes();
@@ -315,7 +390,14 @@ public class TiendaSoftwareModelo {
 
         return false;
     }
-
+    /**
+     * Método auxiliar privado encargado de construir y añadir los nodos XML correspondientes
+     * a un producto (sea Libre o Privativo) dentro del árbol DOM.
+     *
+     * @param documento Documento XML en curso.
+     * @param raiz Nodo raíz contenedor.
+     * @param p Producto del cual se extraerán los datos.
+     */
     private void agregarProductoXML(Document documento, Element raiz, Producto p) {
 
         if (p == null) return;
@@ -419,7 +501,25 @@ public class TiendaSoftwareModelo {
             }
         }
     }
+    /**
+     * Actualiza los datos de un producto existente en la lista reemplazándolo por uno nuevo.
+     *
+     * @param antiguo El objeto producto original que se desea modificar.
+     * @param nuevo El nuevo objeto producto con los datos actualizados.
+     * @return {@code true} si se actualizó correctamente; {@code false} si el producto antiguo no se encontró.
+     */
+    public boolean actualizarProducto(Producto antiguo, Producto nuevo) {
 
+        int posicion = listaProductos.indexOf(antiguo);
+
+        if (posicion == -1) {
+            return false;
+        }
+
+        listaProductos.set(posicion, nuevo);
+
+        return true;
+    }
 
     }
 
