@@ -303,13 +303,33 @@ public class TiendaSoftwareControlador implements ActionListener, ListSelectionL
 
     }
     private void exportarSeleccionado() {
+
         int fila = vista.productosTabla.getSelectedRow();
 
         if (fila == -1) {
             Util.mensajeError("Selecciona un producto de la tabla");
             return;
         }
+
         Producto producto = modelo.obtenerProductos().get(fila);
+
+        JFileChooser selector = Util.crearSelectorFichero(
+                ultimaRutaExportada, "Archivos XML", "xml");
+
+        int resultado = selector.showSaveDialog(vista.frame);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+
+            File fichero = selector.getSelectedFile();
+
+            if (!fichero.getName().toLowerCase().endsWith(".xml")) {
+                fichero = new File(fichero.getAbsolutePath() + ".xml");
+            }
+
+            modelo.exportarProductoXML(fichero, producto);
+
+            ultimaRutaExportada = fichero.getParentFile();
+        }
     }
 
 

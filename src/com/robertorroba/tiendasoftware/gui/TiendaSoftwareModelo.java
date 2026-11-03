@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
+
 public class TiendaSoftwareModelo {
     public ArrayList<Producto> listaProductos;
 
@@ -229,7 +230,7 @@ public class TiendaSoftwareModelo {
                         requisitos.put(tipo, valor);
                     }
                     nuevoPrivativo.setRequisitos(requisitos);
-                    if (!existeSoftware(nuevoLibre.getNombre())) {
+                    if (!existeSoftware(nuevoPrivativo.getNombre())) {
                         listaProductos.add(nuevoPrivativo);
                     }
                     }
@@ -237,6 +238,187 @@ public class TiendaSoftwareModelo {
 
                 }
             }
+
+    public boolean exportarProductoXML(File fichero, Producto producto) {
+
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            Document documento;
+            Element raiz;
+
+            if (fichero.exists()) {
+                documento = builder.parse(fichero);
+                raiz = (Element) documento.getElementsByTagName("Productos").item(0);
+
+                if (raiz == null) {
+                    throw new IOException("El XML no contiene el nodo Productos");
+                }
+
+            } else {
+                DOMImplementation dom = builder.getDOMImplementation();
+                documento = dom.createDocument(null, "xml", null);
+
+                raiz = documento.createElement("Productos");
+                documento.getDocumentElement().appendChild(raiz);
+            }
+
+            // Comprobar si el producto ya existe
+            if (productoExisteEnXML(raiz, producto.getNombre())) {
+                return false;
+            }
+
+            // Añadir el producto
+            agregarProductoXML(documento, raiz, producto);
+
+            // Guardar el documento
+            Source source = new DOMSource(documento);
+            Result resultado = new StreamResult(fichero);
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.transform(source, resultado);
+
+            return true;
+
+        } catch (ParserConfigurationException | SAXException |
+                IOException | TransformerException e) {
+
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean productoExisteEnXML(Element raiz, String nombre) {
+
+        NodeList productos = raiz.getChildNodes();
+
+        for (int i = 0; i < productos.getLength(); i++) {
+
+            Node nodo = productos.item(i);
+
+            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+
+                Element elemento = (Element) nodo;
+
+                NodeList nombres = elemento.getElementsByTagName("nombre");
+
+                if (nombres.getLength() > 0) {
+                    String nombreXML = nombres.item(0).getTextContent();
+
+                    if (nombreXML.equals(nombre)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void agregarProductoXML(Document documento, Element raiz, Producto p) {
+
+        if (p == null) return;
+
+        Element nodoProducto;
+
+        if (p instanceof Libre) {
+            nodoProducto = documento.createElement("Libre");
+        } else if (p instanceof Privativo) {
+            nodoProducto = documento.createElement("Privativo");
+        } else {
+            return;
+        }
+
+        raiz.appendChild(nodoProducto);
+
+        // Nombre
+        Element nodoDatos = documento.createElement("nombre");
+        nodoProducto.appendChild(nodoDatos);
+        nodoDatos.appendChild(documento.createTextNode(p.getNombre()));
+
+        // Descripción
+        nodoDatos = documento.createElement("descripcion");
+        nodoProducto.appendChild(nodoDatos);
+        nodoDatos.appendChild(documento.createTextNode(p.getDescripcion()));
+
+        // Categorías
+        Element nodoCategorias = documento.createElement("categorias");
+        nodoProducto.appendChild(nodoCategorias);
+
+        for (String categoria : p.getCategorias()) {
+            Element nodoCategoria = documento.createElement("categoria");
+            nodoCategorias.appendChild(nodoCategoria);
+            nodoCategoria.appendChild(documento.createTextNode(categoria));
+        }
+
+        // Fecha de publicación
+        nodoDatos = documento.createElement("fechaPublicacion");
+        nodoProducto.appendChild(nodoDatos);
+        nodoDatos.appendChild(documento.createTextNode(
+                p.getFechaPublicacion().toString()));
+
+        // Tipo de producto
+        nodoDatos = documento.createElement("tipoProducto");
+        nodoProducto.appendChild(nodoDatos);
+        nodoDatos.appendChild(documento.createTextNode(
+                p.getTipoProducto().toString()));
+
+        // Datos específicos de Libre
+        if (p instanceof Libre) {
+
+            Libre productoLibre = (Libre) p;
+
+            nodoDatos = documento.createElement("licencia");
+            nodoProducto.appendChild(nodoDatos);
+            nodoDatos.appendChild(documento.createTextNode(
+                    productoLibre.getLicencia()));
+
+            Element nodoSistemas = documento.createElement("sistemasCompatibles");
+            nodoProducto.appendChild(nodoSistemas);
+
+            for (SistemaOperativo sistema :
+                    productoLibre.getSistemasCompatibles()) {
+
+                Element nodoSistema = documento.createElement("sistema");
+                nodoSistemas.appendChild(nodoSistema);
+                nodoSistema.appendChild(documento.createTextNode(
+                        sistema.toString()));
+            }
+
+        } else if (p instanceof Privativo) {
+
+            Privativo productoPrivado = (Privativo) p;
+
+            // Precio
+            nodoDatos = documento.createElement("precio");
+            nodoProducto.appendChild(nodoDatos);
+            nodoDatos.appendChild(documento.createTextNode(
+                    String.valueOf(productoPrivado.getPrecio())));
+
+            // Unidades
+            nodoDatos = documento.createElement("unidades");
+            nodoProducto.appendChild(nodoDatos);
+            nodoDatos.appendChild(documento.createTextNode(
+                    String.valueOf(productoPrivado.getUnidades())));
+
+            // Requisitos
+            Element nodoRequisitos = documento.createElement("requisitos");
+            nodoProducto.appendChild(nodoRequisitos);
+
+            for (Map.Entry<TipoRequisito, Integer> requisito :
+                    productoPrivado.getRequisitos().entrySet()) {
+
+                Element nodoEtiqueta = documento.createElement(
+                        requisito.getKey().name());
+
+                nodoRequisitos.appendChild(nodoEtiqueta);
+
+                nodoEtiqueta.appendChild(documento.createTextNode(
+                        String.valueOf(requisito.getValue())));
+            }
+        }
+    }
 
 
     }
