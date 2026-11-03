@@ -1,47 +1,85 @@
 package com.robertorroba.tiendasoftware.gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
-
+import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 
 public class Ventana {
     private JPanel panel1;
-    private JLabel tipoLbl;
-    private JRadioButton libreRadioButton;
-    private JRadioButton privativoRadioButton;
-    private JLabel tipoProductoLbl;
-    private JRadioButton softwareRadioButton;
-    private JRadioButton herramientaRadioButton;
-    private JLabel nombreLbl;
-    private JTextField nombreTxt;
-    private JLabel descripcionLbl;
-    private JTextField descripcionTxt;
-    private JLabel categoriasLbl;
-    private JTextField categoriasTxt;
-    private JLabel fechaPublicacionLbl;
-    private DatePicker fechaPublicacionTxt;
+    public JLabel tipoLbl;
+    public JRadioButton libreRadioButton;
+    public  JRadioButton privativoRadioButton;
+    public JLabel tipoProductoLbl;
+    public JRadioButton softwareRadioButton;
+    public JRadioButton herramientaRadioButton;
+    public JLabel nombreLbl;
+    public JTextField nombreTxt;
+    public JLabel descripcionLbl;
+    public JTextField descripcionTxt;
+    public JLabel categoriasLbl;
+    public JTextField categoriasTxt;
+    public JLabel fechaPublicacionLbl;
+    public DatePicker fechaPublicacionTxt;
     private JPanel panelLibre;
-    private JLabel licenciaLbl;
-    private JTextField licenciaTxt;
-    private JCheckBox windowsChk;
-    private JCheckBox linuxChk;
-    private JCheckBox macOsChk;
-    private JLabel precioLbl;
-    private JTextField precioTxt;
-    private JLabel udsLbl;
-    private JTextField unidadesTxt;
-    private JCheckBox ramChck;
-    private JCheckBox espacioChk;
-    private JCheckBox nucleosChk;
-    private JTextField ramTxt;
-    private JTextField nucleosTxt;
-    private JTextField espacioTxt;
+    public JLabel licenciaLbl;
+    public JTextField licenciaTxt;
+    public JCheckBox windowsChk;
+    public JCheckBox linuxChk;
+    public JCheckBox macOsChk;
+    public JLabel precioLbl;
+    public JTextField precioTxt;
+    public JLabel udsLbl;
+    public JTextField unidadesTxt;
+    public JCheckBox ramChck;
+    public JCheckBox espacioChk;
+    public JCheckBox nucleosChk;
+    public JTextField ramTxt;
+    public JTextField nucleosTxt;
+    public JTextField espacioTxt;
     private JPanel panelPrivativo;
     private JPanel panelInferior;
     private JScrollPane productosScroll;
-    private JTable productosTabla;
-    private JButton nuevobtn;
-    private JButton importarBtn;
-    private JButton exportarBtn;
-    private JButton cerrarBtn;
+    public JTable productosTabla;
+    public JButton nuevobtn;
+    public JButton importarBtn;
+    public JButton exportarBtn;
+    public JButton cerrarBtn;
+    public JButton exportarSeleccionadoBtn;
+    // añadidos por mi
+    public JFrame frame;
+    public DefaultTableModel modeloTabla;
+
+    public Ventana() {
+        frame = new JFrame("Tienda de Software");
+        frame.setContentPane(panel1);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        initComponents();
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private void createUIComponents() {
+        fechaPublicacionTxt =new DatePicker();
+        fechaPublicacionTxt.getComponentToggleCalendarButton()
+                .setIcon(new ImageIcon("resources/img/calendario.png"));
+
+        fechaPublicacionTxt.getComponentToggleCalendarButton()
+                .setText("");
+    }
+    private void initComponents() {
+
+        modeloTabla = new DefaultTableModel(
+                new Object[]{"Nombre", "Tipo", "Categorías", "Fecha publicación"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
+
+        productosTabla.setModel(modeloTabla);
+    }
 }

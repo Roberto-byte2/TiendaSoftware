@@ -162,7 +162,6 @@ public class TiendaSoftwareModelo {
 
     }
         public void importarXML(File fichero) throws ParserConfigurationException, IOException, SAXException {
-            listaProductos= new ArrayList<Producto>();
             Libre nuevoLibre = null;
             Privativo nuevoPrivativo = null;
 
@@ -196,7 +195,10 @@ public class TiendaSoftwareModelo {
                         sistemas.add(SistemaOperativo.valueOf(sistema.getTextContent()));
                     }
                     nuevoLibre.setSistemasCompatibles(sistemas);
-                    listaProductos.add(nuevoLibre);
+                    if (!existeSoftware(nuevoLibre.getNombre())) {
+                        listaProductos.add(nuevoLibre);
+                    }
+
 
                 }else if (nodoProducto.getTagName().equals("Privativo")) {
                     nuevoPrivativo = new Privativo();
@@ -227,7 +229,9 @@ public class TiendaSoftwareModelo {
                         requisitos.put(tipo, valor);
                     }
                     nuevoPrivativo.setRequisitos(requisitos);
-                    listaProductos.add(nuevoPrivativo);
+                    if (!existeSoftware(nuevoLibre.getNombre())) {
+                        listaProductos.add(nuevoPrivativo);
+                    }
                     }
 
 
