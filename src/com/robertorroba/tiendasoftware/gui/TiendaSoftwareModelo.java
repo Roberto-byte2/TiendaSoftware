@@ -381,7 +381,7 @@ public class TiendaSoftwareModelo {
                 if (nombres.getLength() > 0) {
                     String nombreXML = nombres.item(0).getTextContent();
 
-                    if (nombreXML.equals(nombre)) {
+                    if (nombreXML.equalsIgnoreCase(nombre)) {
                         return true;
                     }
                 }

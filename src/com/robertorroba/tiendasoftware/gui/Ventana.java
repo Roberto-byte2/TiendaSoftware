@@ -110,6 +110,10 @@ public class Ventana {
      */
     private void initComponents() {
         descripcionTxt.setRows(4);
+        descripcionTxt.setLineWrap(true);
+        descripcionTxt.setWrapStyleWord(true);
+
+
         modeloTabla = new DefaultTableModel(
                 new Object[]{"Nombre", "Producto", "Licencia", "Categorías", "Fecha publicación"}, 0
         ) {
@@ -142,7 +146,6 @@ public class Ventana {
     public void mostrarPanel(String nombre) {
         cardLayout.show(panelTipoEspecifico, nombre);
         panelTipoEspecifico.setVisible(true);
-
         frame.revalidate();
         frame.repaint();
     }

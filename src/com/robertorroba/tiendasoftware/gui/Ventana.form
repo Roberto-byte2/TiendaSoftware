@@ -353,20 +353,18 @@
           <text value="Ver / Editar"/>
         </properties>
       </component>
-      <scrollpane id="87a33">
+      <scrollpane id="dce96">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="4" hsize-policy="4" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="7276b" class="javax.swing.JTextArea" binding="descripcionTxt">
+          <component id="610b1" class="javax.swing.JTextArea" binding="descripcionTxt">
             <constraints/>
             <properties>
               <columns value="20"/>
-              <lineWrap value="true"/>
               <rows value="4"/>
-              <wrapStyleWord value="true"/>
             </properties>
           </component>
         </children>
